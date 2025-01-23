@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MarkscanAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ba2102441d653b79d8510c7e61e1012dc6d75356")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+54358acff56b3654d25b90f0fe8ea40046ec2b05")]
 [assembly: System.Reflection.AssemblyProductAttribute("MarkscanAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MarkscanAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

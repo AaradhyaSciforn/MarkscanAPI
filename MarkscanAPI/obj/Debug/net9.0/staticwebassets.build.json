@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "Mnwhq2Pv0m3Me53Tl7UjTyhQ9SjIMjW7to7b2hOGoBg=",
+  "Source": "MarkscanAPI",
+  "BasePath": "_content/MarkscanAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
