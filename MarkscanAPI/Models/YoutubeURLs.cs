@@ -11,23 +11,26 @@ namespace MarkscanAPI.Models
 
         [Column("SourceURL")]
         public string? SourceURL { get; set; }
-        [Column("RemovalBotStatus")]
-        public string? RemovalBotStatus { get; set; }
-
+        [Computed]
+        [Write(false)]
+        public string? AssetName { get; set; }
         [Column("RemovalStatus")]
         public string? RemovalStatus { get; set; }
 
         [Column("IsChannelSuspended")]
         public bool IsChannelSuspended { get; set; }
-        [Computed]
-        [Write(false)]
-        public string? AssetName { get; set; }
+        [Column("UploadDate")]
+        public DateTime? UploadDate { get; set; }
+        [Column("ViewCount")]
+        public string? ViewCount { get; set; }
+        [Column("LikeCount")]
+        public string? LikeCount { get; set; }
 
 
         public static async Task<IEnumerable<YoutubeURLs>> GetURLsForClient(IDatabaseConnection databaseConnection, string? ClientId, DateTime StartDate, DateTime? EndDate)
         {
             using var conn = databaseConnection.GetConnection();
-            return await conn.QueryAsync<YoutubeURLs>(@"Select i.SourceURL,A.AssetName AssetName, i.RemovalStatus, i.IsChannelSuspended from YoutubeURLs i
+            return await conn.QueryAsync<YoutubeURLs>(@"Select i.SourceURL,A.AssetName AssetName, i.UploadDate, i.ViewCount, i.LikeCount, i.RemovalStatus, i.IsChannelSuspended from YoutubeURLs i
                         inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1
                         join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
                         where i.URLUploadDate >= @YTStartDate and i.URLUploadDate<= @YTEndDate and  i.IsInvalidURL = 0;"
