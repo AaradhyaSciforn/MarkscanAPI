@@ -186,7 +186,7 @@ app.MapPost("/GetInfringements", [Authorize(AuthenticationSchemes = JwtBearerDef
             {
                 req.EndDate = await CommonFunctions.ConvertUtcToIst(DateTime.UtcNow);
             }
-            var ytURLs = await YoutubeURLs.GetURLsForClient(databaseConnection, "83C95897-D4DF-4B51-9C95-1EE42DAA34C8", (DateTime)req.StartDate, req.EndDate);
+            var ytURLs = await YoutubeURLs.GetURLsForClient(databaseConnection, "83C95897-D4DF-4B51-9C95-1EE42DAA34C8", (DateTime)req.StartDate, req.EndDate, req.AssetName);
             return Results.Ok(ytURLs);
         }
         return Results.BadRequest("Start Date must be present!");
