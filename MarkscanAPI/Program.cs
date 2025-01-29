@@ -1,15 +1,18 @@
+using Dapper;
 using DbAccess;
 using MarkscanAPI.Common;
 using MarkscanAPI.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Annotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,7 +83,11 @@ builder.Services.AddSwaggerGen(options =>
     options.EnableAnnotations();
 });
 
-
+/*builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+});*/
+builder.Services.AddDistributedMemoryCache();
 var MediaScanConnection = builder.Configuration.GetConnectionString("MediaScanConnection");
 IDatabaseConnection databaseConnection = new DatabaseConnection(MediaScanConnection);
 
@@ -114,7 +121,7 @@ app.Use(async (context, next) =>
 app.UseAuthorization();
 app.UseAuthentication();
 
-app.MapPost("/Login", async ([FromBody] Login_DTO user) =>
+app.MapPost("/Login", async ([FromBody] Login_DTO user, IDistributedCache cache) =>
 {
 
     try
@@ -144,7 +151,7 @@ app.MapPost("/Login", async ([FromBody] Login_DTO user) =>
                         issuer: builder.Configuration["Jwt:Issuer"],
                         audience: builder.Configuration["Jwt:Audience"],
                         claims: claims,
-                        expires: DateTime.Now.AddDays(1),
+                        expires: DateTime.Now.AddMonths(1),
                         notBefore: DateTime.Now,
                         signingCredentials: new SigningCredentials(
                             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
@@ -152,6 +159,16 @@ app.MapPost("/Login", async ([FromBody] Login_DTO user) =>
                     );
 
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+                    var cacheKey = token.Id;
+                    var cacheOptions = new DistributedCacheEntryOptions()
+                    {
+                        AbsoluteExpiration = token.ValidTo,
+                    };
+                    using var conn = databaseConnection.GetConnection();
+                    loggedInUser.ClientId = await conn.QueryFirstOrDefaultAsync<string>(@"select Id from ClientMaster where trim(lower(CompanyName))=trim(lower(@name));", new { name = loggedInUser.UserName });
+                    var userData = JsonSerializer.Serialize(loggedInUser);
+                    await cache.SetStringAsync(cacheKey, userData, cacheOptions);
                     return Results.Ok(tokenString);
                 }
                 else
@@ -175,18 +192,32 @@ app.MapPost("/Login", async ([FromBody] Login_DTO user) =>
 
 }).WithTags("1. Authentication").WithMetadata(new SwaggerOperationAttribute("Authentication.", "On valid login user will get a JWT token which can be used to access other requests."));
 
-app.MapPost("/GetInfringements", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req) =>
+app.MapPost("/GetInfringements", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req, 
+    ClaimsPrincipal user, // Automatically populated from JWT
+    IDistributedCache cache) =>
 {
-
     try
     {
+        var jti = user.FindFirstValue(JwtRegisteredClaimNames.Jti);
+        if (string.IsNullOrEmpty(jti))
+        {
+            return Results.Unauthorized();
+        }
+        var userData = await cache.GetStringAsync(jti);
+        if (userData == null)
+        {
+            return Results.Unauthorized();
+        }
+
+        var loggedInUser = JsonSerializer.Deserialize<Credentials>(userData);
         if (req.StartDate != null)
         {
             if(req.EndDate == null)
             {
-                req.EndDate = await CommonFunctions.ConvertUtcToIst(DateTime.UtcNow);
+                req.EndDate = CommonFunctions.ConvertUtcToIst(DateTime.UtcNow);
             }
-            var ytURLs = await YoutubeURLs.GetURLsForClient(databaseConnection, "83C95897-D4DF-4B51-9C95-1EE42DAA34C8", (DateTime)req.StartDate, req.EndDate, req.AssetName);
+            var ytURLs = (await YoutubeURLs.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName)).ToList();
+            ytURLs.ForEach(x => x.URLUploadDate = CommonFunctions.ConvertUtcToIst(x.URLUploadDate));
             return Results.Ok(ytURLs);
         }
         return Results.BadRequest("Start Date must be present!");

@@ -18,6 +18,8 @@ namespace MarkscanAPI.Models
 
         [Column("CredentialTypeId")]
         public string? CredentialTypeId { get; set; }
+        [Computed]
+        public string? ClientId { get; set; }
 
         [Computed]
         [Write(false)]

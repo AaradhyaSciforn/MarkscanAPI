@@ -13,7 +13,7 @@ namespace MarkscanAPI.Common
 {
     public class CommonFunctions : BaseFields
     {
-        public static async Task<DateTime> ConvertUtcToIst(DateTime? dt)
+        public static DateTime ConvertUtcToIst(DateTime? dt)
         {
             DateTime utcdate = (dt == null) ? DateTime.UtcNow : dt.Value;
             var istdate = TimeZoneInfo.ConvertTimeFromUtc(utcdate,
