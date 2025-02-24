@@ -26,8 +26,8 @@ namespace MarkscanAPI.Models
         [Column("IsChannelSuspended")]
         public bool IsChannelSuspended { get; set; }
 
-        [Column("URLUploadDate")]
-        public DateTime? URLUploadDate { get; set; }
+        [Column("UploadDate")]
+        public DateTime? UploadDate { get; set; }
 
         [Column("ViewCount")]
         public string? ViewCount { get; set; }
@@ -93,7 +93,7 @@ namespace MarkscanAPI.Models
             using var conn = databaseConnection.GetConnection();
             if (string.IsNullOrEmpty(AssetName))
             {
-                return await conn.QueryAsync<YoutubeURLs>(@"Select i.SourceURL,A.AssetName AssetName,it.Name InfringementType, i.URLUploadDate, i.ViewCount, i.LikeCount, i.RemovalStatus, i.IsChannelSuspended,i.dislikeCount,i.SubscriberCount,i.CommentCount,
+                return await conn.QueryAsync<YoutubeURLs>(@"Select i.SourceURL,A.AssetName AssetName,it.Name InfringementType, convert_tz(i.UploadDate,'+00:00','+05:30') UploadDate, i.ViewCount, i.LikeCount, i.RemovalStatus, i.IsChannelSuspended,i.dislikeCount,i.SubscriberCount,i.CommentCount,
                             i.FavouriteCount,i.VideoId,i.VideoName,i.VideoDuration,qp.Name QualityOfPrint,i.ChannelName,lng.Name Language,i.Keywords, cn.Name Country,i.Season,i.Episode from YoutubeURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -101,13 +101,13 @@ namespace MarkscanAPI.Models
                             left join Countries cn on i.CountryId=cn.Id and cn.Active
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
-                            where i.URLUploadDate >= @YTStartDate and i.URLUploadDate<= @YTEndDate and  i.IsInvalidURL = 0;"
+                            where i.UploadDate >= @YTStartDate and i.UploadDate<= @YTEndDate and  i.IsInvalidURL = 0;"
                             , new { ClientId, YTStartDate = StartDate.AddDays(-1).ToString("yyyy-MM-dd") + " 18:30:00", YTEndDate = EndDate?.ToString("yyyy-MM-dd") + " 18:30:00", commandTimeout = 3000 });
             }
             else
             {
                 var assetId = await conn.QueryFirstOrDefaultAsync<string>(@"select Id from Asset where lower(AssetName)=lower(@AssetName)", new { AssetName });
-                return await conn.QueryAsync<YoutubeURLs>(@"Select i.SourceURL,A.AssetName AssetName,it.Name InfringementType, i.URLUploadDate, i.ViewCount, i.LikeCount, i.RemovalStatus, i.IsChannelSuspended,i.dislikeCount,i.SubscriberCount,i.CommentCount,
+                return await conn.QueryAsync<YoutubeURLs>(@"Select i.SourceURL,A.AssetName AssetName,it.Name InfringementType, convert_tz(i.UploadDate,'+00:00','+05:30') UploadDate, i.ViewCount, i.LikeCount, i.RemovalStatus, i.IsChannelSuspended,i.dislikeCount,i.SubscriberCount,i.CommentCount,
                             i.FavouriteCount,i.VideoId,i.VideoName,i.VideoDuration,qp.Name QualityOfPrint,i.ChannelName,lng.Name Language,i.Keywords, cn.Name Country,i.Season,i.Episode from YoutubeURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 and AssetId=@assetId
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -115,7 +115,7 @@ namespace MarkscanAPI.Models
                             left join Countries cn on i.CountryId=cn.Id and cn.Active
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
-                            where i.URLUploadDate >= @YTStartDate and i.URLUploadDate<= @YTEndDate and  i.IsInvalidURL = 0;"
+                            where i.UploadDate >= @YTStartDate and i.UploadDate<= @YTEndDate and  i.IsInvalidURL = 0;"
                             , new { ClientId, YTStartDate = StartDate.AddDays(-1).ToString("yyyy-MM-dd") + " 18:30:00", YTEndDate = EndDate?.ToString("yyyy-MM-dd") + " 18:30:00", assetId, commandTimeout = 3000 });
             }
         }

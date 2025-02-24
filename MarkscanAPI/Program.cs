@@ -192,7 +192,7 @@ app.MapPost("/Login", async ([FromBody] Login_DTO user, IDistributedCache cache)
 
 }).WithTags("1. Authentication").WithMetadata(new SwaggerOperationAttribute("Authentication.", "On valid login user will get a JWT token which can be used to access other requests."));
 
-app.MapPost("/GetInfringements/YoutubeUrls", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req, 
+app.MapPost("/GetInfringements/Youtube", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req, 
     ClaimsPrincipal user, // Automatically populated from JWT
     IDistributedCache cache) =>
 {
@@ -217,7 +217,6 @@ app.MapPost("/GetInfringements/YoutubeUrls", [Authorize(AuthenticationSchemes = 
                 req.EndDate = CommonFunctions.ConvertUtcToIst(DateTime.UtcNow);
             }
             var ytURLs = (await YoutubeURLs.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName)).ToList();
-            ytURLs.ForEach(x => x.URLUploadDate = CommonFunctions.ConvertUtcToIst(x.URLUploadDate));
             return Results.Ok(ytURLs);
         }
         return Results.BadRequest("Start Date must be present!");
@@ -229,7 +228,7 @@ app.MapPost("/GetInfringements/YoutubeUrls", [Authorize(AuthenticationSchemes = 
 
 }).WithTags("2. Client").WithMetadata(new SwaggerOperationAttribute("Get all the Infringements.", "Gets the list of all the infringements present on YouTube for the client.")); //yout
 
-app.MapPost("/GetInfringements/FaceBookUrls", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
+app.MapPost("/GetInfringements/Facebook", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
     ClaimsPrincipal user, // Automatically populated from JWT
     IDistributedCache cache) =>
 {
@@ -254,7 +253,6 @@ app.MapPost("/GetInfringements/FaceBookUrls", [Authorize(AuthenticationSchemes =
                 req.EndDate = CommonFunctions.ConvertUtcToIst(DateTime.UtcNow);
             }
             var FBURLs = (await FacebookURLs.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName)).ToList();
-            FBURLs.ForEach(x => x.publishedDate = CommonFunctions.ConvertUtcToIst(x.publishedDate));
             return Results.Ok(FBURLs);
         }
         return Results.BadRequest("Start Date must be present!");
@@ -267,7 +265,7 @@ app.MapPost("/GetInfringements/FaceBookUrls", [Authorize(AuthenticationSchemes =
 }).WithTags("2. Client").WithMetadata(new SwaggerOperationAttribute("Get all the Infringements.", "Gets the list of all the infringements present on FaceBook for the client.")); // face
 
 
-app.MapPost("/GetInfringements/InstagramUrls", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
+app.MapPost("/GetInfringements/Instagram", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
     ClaimsPrincipal user, // Automatically populated from JWT
     IDistributedCache cache) =>
 {
@@ -292,7 +290,6 @@ app.MapPost("/GetInfringements/InstagramUrls", [Authorize(AuthenticationSchemes 
                 req.EndDate = CommonFunctions.ConvertUtcToIst(DateTime.UtcNow);
             }
             var IGURLs = (await InstagramUrls.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName)).ToList();
-            IGURLs.ForEach(x => x.PostDate = CommonFunctions.ConvertUtcToIst(x.PostDate));
             return Results.Ok(IGURLs);
         }
         return Results.BadRequest("Start Date must be present!");
@@ -304,7 +301,7 @@ app.MapPost("/GetInfringements/InstagramUrls", [Authorize(AuthenticationSchemes 
 
 }).WithTags("2. Client").WithMetadata(new SwaggerOperationAttribute("Get all the Infringements.", "Gets the list of all the infringements present on Instagram for the client.")); //insta
 
-app.MapPost("/GetInfringements/TelegramUrls", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
+app.MapPost("/GetInfringements/Telegram", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
     ClaimsPrincipal user, // Automatically populated from JWT
     IDistributedCache cache) =>
 {
@@ -328,9 +325,9 @@ app.MapPost("/GetInfringements/TelegramUrls", [Authorize(AuthenticationSchemes =
             {
                 req.EndDate = CommonFunctions.ConvertUtcToIst(DateTime.UtcNow);
             }
-            var IGURLs = (await TelegramUrls.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName)).ToList();
-            IGURLs.ForEach(x => x.PostUploadDateTime = CommonFunctions.ConvertUtcToIst(x.PostUploadDateTime));
-            return Results.Ok(IGURLs);
+            var TGURLs = (await TelegramUrls.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName)).ToList();
+            TGURLs.ForEach(x => x.PostUploadDateTime = CommonFunctions.ConvertUtcToIst(x.PostUploadDateTime));
+            return Results.Ok(TGURLs);
         }
         return Results.BadRequest("Start Date must be present!");
     }
@@ -341,7 +338,7 @@ app.MapPost("/GetInfringements/TelegramUrls", [Authorize(AuthenticationSchemes =
 
 }).WithTags("2. Client").WithMetadata(new SwaggerOperationAttribute("Get all the Infringements.", "Gets the list of all the infringements present on Telegram for the client.")); // tele
 
-app.MapPost("/GetInfringements/TwitterURLsNEW", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
+app.MapPost("/GetInfringements/Twitter", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
     ClaimsPrincipal user, // Automatically populated from JWT
     IDistributedCache cache) =>
 {
@@ -378,7 +375,7 @@ app.MapPost("/GetInfringements/TwitterURLsNEW", [Authorize(AuthenticationSchemes
 
 }).WithTags("2. Client").WithMetadata(new SwaggerOperationAttribute("Get all the Infringements.", "Gets the list of all the infringements present on Twitter for the client.")); // tweet
 
-app.MapPost("/GetInfringements/UGCAndOtherSocialMediaURLs", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
+app.MapPost("/GetInfringements/UGCAndOtherSocialMedia", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
     ClaimsPrincipal user, // Automatically populated from JWT
     IDistributedCache cache) =>
 {
