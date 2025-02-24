@@ -325,8 +325,7 @@ app.MapPost("/GetInfringements/Telegram", [Authorize(AuthenticationSchemes = Jwt
             {
                 req.EndDate = CommonFunctions.ConvertUtcToIst(DateTime.UtcNow);
             }
-            var TGURLs = (await TelegramUrls.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName)).ToList();
-            TGURLs.ForEach(x => x.PostUploadDateTime = CommonFunctions.ConvertUtcToIst(x.PostUploadDateTime));
+            var TGURLs = (await TelegramUrls.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName)).ToList(); // already in ist
             return Results.Ok(TGURLs);
         }
         return Results.BadRequest("Start Date must be present!");
@@ -363,7 +362,6 @@ app.MapPost("/GetInfringements/Twitter", [Authorize(AuthenticationSchemes = JwtB
                 req.EndDate = CommonFunctions.ConvertUtcToIst(DateTime.UtcNow);
             }
             var IGURLs = (await TwitterURLsNEW.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName)).ToList();
-            IGURLs.ForEach(x => x.PublishedOn = CommonFunctions.ConvertUtcToIst(x.PublishedOn));
             return Results.Ok(IGURLs);
         }
         return Results.BadRequest("Start Date must be present!");
@@ -400,7 +398,6 @@ app.MapPost("/GetInfringements/UGCAndOtherSocialMedia", [Authorize(Authenticatio
                 req.EndDate = CommonFunctions.ConvertUtcToIst(DateTime.UtcNow);
             }
             var IGURLs = (await UGCAndOtherSocialMediaURLs.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName)).ToList();
-            IGURLs.ForEach(x => x.PostUploadDate = CommonFunctions.ConvertUtcToIst(x.PostUploadDate));
             return Results.Ok(IGURLs);
         }
         return Results.BadRequest("Start Date must be present!");
