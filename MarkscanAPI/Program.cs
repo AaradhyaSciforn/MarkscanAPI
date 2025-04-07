@@ -192,6 +192,55 @@ app.MapPost("/Login", async ([FromBody] Login_DTO user, IDistributedCache cache)
 
 }).WithTags("1. Authentication").WithMetadata(new SwaggerOperationAttribute("Authentication.", "On valid login user will get a JWT token which can be used to access other requests."));
 
+
+app.MapPost("/GetInfringements/AllPlatforms", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async (
+    [FromBody] Request_DTO req,
+    ClaimsPrincipal user,
+    IDistributedCache cache) =>
+{
+    try
+    {
+        var jti = user.FindFirstValue(JwtRegisteredClaimNames.Jti);
+        if (string.IsNullOrEmpty(jti)) return Results.Unauthorized();
+
+        var userData = await cache.GetStringAsync(jti);
+        if (userData == null) return Results.Unauthorized();
+
+        var loggedInUser = JsonSerializer.Deserialize<Credentials>(userData);
+        if (req.StartDate == null) return Results.BadRequest("Start Date must be present!");
+        req.EndDate ??= CommonFunctions.ConvertUtcToIst(DateTime.UtcNow);
+
+        var ytTask = YoutubeURLs.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName);
+        var fbTask = FacebookURLs.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName);
+        var igTask = InstagramUrls.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName);
+        var tgTask = TelegramUrls.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName);
+        var twTask = TwitterURLsNEW.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName);
+        var ugcTask = UGCAndOtherSocialMediaURLs.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName);
+
+        await Task.WhenAll(ytTask, fbTask, igTask, tgTask, twTask, ugcTask);
+
+        var result = new List<InfringementDTO>();
+
+        //  var langcheck = ytTask.Result.FirstOrDefault();
+
+        result.AddRange(ytTask.Result.Select(x => InfringementDTO.MapToDTO(x, "YouTube")).ToList());
+        result.AddRange(fbTask.Result.Select(x => InfringementDTO.MapToDTO(x, "Facebook")).ToList());
+        result.AddRange(igTask.Result.Select(x => InfringementDTO.MapToDTO(x, "Instagram")).ToList());
+        result.AddRange(tgTask.Result.Select(x => InfringementDTO.MapToDTO(x, "Telegram")).ToList());
+        result.AddRange(twTask.Result.Select(x => InfringementDTO.MapToDTO(x, "Twitter")).ToList());
+        result.AddRange(ugcTask.Result.Select(x => InfringementDTO.MapToDTO(x, "UGC")).ToList());
+
+        return Results.Ok(result);
+    }
+    catch (Exception ex)
+    {
+        return Results.BadRequest(ex.Message.ToString());
+    }
+}).WithTags("2. Client")
+  .WithMetadata(new SwaggerOperationAttribute("Get all the Infringements (All Platforms)", "Gets the list of all the infringements across all platforms for the client."));
+
+
+
 app.MapPost("/GetInfringements/Youtube", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req, 
     ClaimsPrincipal user, // Automatically populated from JWT
     IDistributedCache cache) =>
@@ -446,54 +495,6 @@ app.MapPost("/GetInfringements/UGCAndOtherSocialMedia", [Authorize(Authenticatio
 
 }).WithTags("2. Client").WithMetadata(new SwaggerOperationAttribute("Get all the Infringements.", "Gets the list of all the infringements present on other Social Medias for the client.")); //UGC
 */
-
-app.MapPost("/GetInfringements/AllPlatformsFlat", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async (
-    [FromBody] Request_DTO req,
-    ClaimsPrincipal user,
-    IDistributedCache cache) =>
-{
-    try
-    {
-        var jti = user.FindFirstValue(JwtRegisteredClaimNames.Jti);
-        if (string.IsNullOrEmpty(jti)) return Results.Unauthorized();
-
-        var userData = await cache.GetStringAsync(jti);
-        if (userData == null) return Results.Unauthorized();
-
-        var loggedInUser = JsonSerializer.Deserialize<Credentials>(userData);
-        if (req.StartDate == null) return Results.BadRequest("Start Date must be present!");
-        req.EndDate ??= CommonFunctions.ConvertUtcToIst(DateTime.UtcNow);
-
-       var ytTask = YoutubeURLs.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName);
-        var fbTask = FacebookURLs.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName);
-        var igTask = InstagramUrls.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName);
-        var tgTask = TelegramUrls.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName);
-        var twTask = TwitterURLsNEW.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName);
-        var ugcTask = UGCAndOtherSocialMediaURLs.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName);
-
-        await Task.WhenAll(ytTask, fbTask, igTask, tgTask, twTask, ugcTask);
-
-        var result = new List<InfringementDTO>();
-
-      //  var langcheck = ytTask.Result.FirstOrDefault();
-
-        result.AddRange(ytTask.Result.Select(x => InfringementDTO.MapToDTO(x, "YouTube")).ToList());
-        result.AddRange(fbTask.Result.Select(x => InfringementDTO.MapToDTO(x, "Facebook")).ToList());
-        result.AddRange(igTask.Result.Select(x => InfringementDTO.MapToDTO(x, "Instagram")).ToList());
-        result.AddRange(tgTask.Result.Select(x => InfringementDTO.MapToDTO(x, "Telegram")).ToList());
-        result.AddRange(twTask.Result.Select(x => InfringementDTO.MapToDTO(x, "Twitter")).ToList());
-        result.AddRange(ugcTask.Result.Select(x => InfringementDTO.MapToDTO(x, "UGC")).ToList());
-
-        return Results.Ok(result);
-    }
-    catch (Exception ex)
-    {
-        return Results.BadRequest(ex.Message.ToString());
-    }
-}).WithTags("2. Client")
-  .WithMetadata(new SwaggerOperationAttribute("Get all the Infringements (All Platforms)", "Gets the list of all the infringements across all platforms for the client."));
-
-
 
 var authenticationTag = new OpenApiTag { Name = "Authentication", Description = "Methods related to authentication" };
 
