@@ -94,7 +94,7 @@ namespace MarkscanAPI.Models
             if (string.IsNullOrEmpty(AssetName))
             {
                 return await conn.QueryAsync<YoutubeURLs>(@"Select i.SourceURL,A.AssetName AssetName,it.Name InfringementType, convert_tz(i.UploadDate,'+00:00','+05:30') UploadDate, i.ViewCount, i.LikeCount, i.RemovalStatus, i.IsChannelSuspended,i.dislikeCount,i.SubscriberCount,i.CommentCount,
-                            i.FavouriteCount,i.VideoId,i.VideoName,i.VideoDuration,qp.Name QualityOfPrint,i.ChannelName,lng.Name Language,i.Keywords, cn.Name Country,i.Season,i.Episode from YoutubeURLs i
+                            i.FavouriteCount,i.VideoId,i.VideoName,i.VideoDuration,qp.Name QualityOfPrint,i.ChannelName,i.ChannelId,lng.Name Language,i.Keywords, cn.Name Country,i.Season,i.Episode from YoutubeURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
                             left join InfringmentType it on i.InfringmentTypeId  =it.Id and it.Active=1
@@ -108,7 +108,7 @@ namespace MarkscanAPI.Models
             {
                 var assetId = await conn.QueryFirstOrDefaultAsync<string>(@"select Id from Asset where lower(AssetName)=lower(@AssetName)", new { AssetName });
                 return await conn.QueryAsync<YoutubeURLs>(@"Select i.SourceURL,A.AssetName AssetName,it.Name InfringementType, convert_tz(i.UploadDate,'+00:00','+05:30') UploadDate, i.ViewCount, i.LikeCount, i.RemovalStatus, i.IsChannelSuspended,i.dislikeCount,i.SubscriberCount,i.CommentCount,
-                            i.FavouriteCount,i.VideoId,i.VideoName,i.VideoDuration,qp.Name QualityOfPrint,i.ChannelName,lng.Name Language,i.Keywords, cn.Name Country,i.Season,i.Episode from YoutubeURLs i
+                            i.FavouriteCount,i.VideoId,i.VideoName,i.VideoDuration,qp.Name QualityOfPrint,i.ChannelName,i.ChannelId,lng.Name Language,i.Keywords, cn.Name Country,i.Season,i.Episode from YoutubeURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 and AssetId=@assetId
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
                             left join InfringmentType it on i.InfringmentTypeId  =it.Id and it.Active=1

@@ -12,8 +12,10 @@ namespace MarkscanAPI.Models
         [Computed]
         [Write(false)]
         public string? AssetName { get; set; }
+
         [Column("VideoURL")]
         public string? VideoURL { get; set; }
+
         [Column("VideoTitle")]
         public string? VideoTitle { get; set; }
         [Column("Views")]
