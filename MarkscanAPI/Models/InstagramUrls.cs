@@ -34,6 +34,8 @@ namespace MarkscanAPI.Models
         public string? Caption { get; set; }
         [Column("PostDate")]
         public DateTime? PostDate { get; set; }
+        [Column("URLUploadDate")]
+        public DateTime? URLUploadDate { get; set; }
         [Column("UserName")]
         public string? UserName { get; set; }
         [Column("UserFullName")]
@@ -67,7 +69,7 @@ namespace MarkscanAPI.Models
                 using var conn = databaseConnection.GetConnection();
                 if (string.IsNullOrEmpty(AssetName))
                 {
-                    return await conn.QueryAsync<InstagramUrls>(@"Select i.VideoURL,A.AssetName AssetName,it.Name InfringementType, convert_tz(i.PostDate,'+00:00','+05:30') PostDate, i.ViewCount, i.LikeCount,i.CommentsCount,
+                    return await conn.QueryAsync<InstagramUrls>(@"Select i.VideoURL,A.AssetName AssetName,it.Name InfringementType, convert_tz(i.PostDate,'+00:00','+05:30') PostDate, convert_tz(i.URLUploadDate,'+00:00','+05:30') URLUploadDate, i.ViewCount, i.LikeCount,i.CommentsCount,
                             i.UserName,i.UserFullName,i.ProfileURL,i.VideoDuration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name AudioLanguage,i.Keywords, cn.Name Country,i.Season,i.Episode from InstagramURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -82,7 +84,7 @@ namespace MarkscanAPI.Models
                 else
                 {
                     var assetId = await conn.QueryFirstOrDefaultAsync<string>(@"select Id from Asset where lower(AssetName)=lower(@AssetName)", new { AssetName });
-                    return await conn.QueryAsync<InstagramUrls>(@"Select i.VideoURL,A.AssetName AssetName,it.Name InfringementType, convert_tz(i.PostDate,'+00:00','+05:30') PostDate, i.ViewCount, i.LikeCount,i.CommentsCount,
+                    return await conn.QueryAsync<InstagramUrls>(@"Select i.VideoURL,A.AssetName AssetName,it.Name InfringementType, convert_tz(i.PostDate,'+00:00','+05:30') PostDate, convert_tz(i.URLUploadDate,'+00:00','+05:30') URLUploadDate, i.ViewCount, i.LikeCount,i.CommentsCount,
                             i.UserName,i.UserFullName,i.ProfileURL,i.VideoDuration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name AudioLanguage,i.Keywords, cn.Name Country,i.Season,i.Episode from InstagramURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 and AssetId=@assetId
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId

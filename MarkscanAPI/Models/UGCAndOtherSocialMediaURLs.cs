@@ -31,6 +31,8 @@ namespace MarkscanAPI.Models
         public string? CommentCount { get; set; }
         [Column("PostUploadDate")]
         public DateTime? PostUploadDate { get; set; }
+        [Column("URLUploadDate")]
+        public DateTime? URLUploadDate { get; set; }
         [Column("Season")]
         public string? Season { get; set; }
         [Column("Episode")]
@@ -64,7 +66,7 @@ namespace MarkscanAPI.Models
                 if (string.IsNullOrEmpty(AssetName))
                 {
                     return await conn.QueryAsync<UGCAndOtherSocialMediaURLs>(@"
-                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
+                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from UGCAndOtherSocialMediaURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -75,7 +77,7 @@ namespace MarkscanAPI.Models
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='33D60DB2-FAAA-45F2-9761-1B3882F4CB39' and pus.Active =1
                             where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
-                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
+                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from OkURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -86,7 +88,7 @@ namespace MarkscanAPI.Models
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='422EF444-8AD9-4DD6-8A41-D9F3670C735E' and pus.Active =1
                             where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
-                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
+                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from TiktokURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -97,7 +99,7 @@ namespace MarkscanAPI.Models
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='86FAC8E8-0F1F-4141-BA84-CD8711B72E39' and pus.Active =1
                             where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
-                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
+                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from ShareChatURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -108,7 +110,7 @@ namespace MarkscanAPI.Models
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='38750701-0627-48E0-B8B9-F48315DCE47F' and pus.Active =1
                             where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
-                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
+                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from VKURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -119,7 +121,7 @@ namespace MarkscanAPI.Models
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='2773562C-0B73-400F-8A4F-68C3F1B24BDE' and pus.Active =1
                             where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
-                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
+                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from DailymotionURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -130,7 +132,7 @@ namespace MarkscanAPI.Models
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='6FD30070-962C-4949-9100-F45A368039A0' and pus.Active =1
                             where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
-                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
+                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from ChomikujURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -141,7 +143,7 @@ namespace MarkscanAPI.Models
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='6D74B5F2-D086-4756-BD2E-F4C8F9993CB3' and pus.Active =1
                             where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
-                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
+                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from BiliBiliURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -157,7 +159,7 @@ namespace MarkscanAPI.Models
                 {
                     var assetId = await conn.QueryFirstOrDefaultAsync<string>(@"select Id from Asset where lower(AssetName)=lower(@AssetName)", new { AssetName });
                     return await conn.QueryAsync<UGCAndOtherSocialMediaURLs>(@"
-                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
+                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from UGCAndOtherSocialMediaURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 and AssetId=@assetId
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -168,7 +170,7 @@ namespace MarkscanAPI.Models
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='33D60DB2-FAAA-45F2-9761-1B3882F4CB39' and pus.Active =1
                             where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
-                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
+                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from OkURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 and AssetId=@assetId
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -179,7 +181,7 @@ namespace MarkscanAPI.Models
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='422EF444-8AD9-4DD6-8A41-D9F3670C735E' and pus.Active =1
                             where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
-                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
+                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from TiktokURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 and AssetId=@assetId
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -190,7 +192,7 @@ namespace MarkscanAPI.Models
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='86FAC8E8-0F1F-4141-BA84-CD8711B72E39' and pus.Active =1
                             where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
-                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
+                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from ShareChatURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 and AssetId=@assetId
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -201,7 +203,7 @@ namespace MarkscanAPI.Models
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='38750701-0627-48E0-B8B9-F48315DCE47F' and pus.Active =1
                             where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
-                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
+                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from VKURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 and AssetId=@assetId
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -212,7 +214,7 @@ namespace MarkscanAPI.Models
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='2773562C-0B73-400F-8A4F-68C3F1B24BDE' and pus.Active =1
                             where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
-                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
+                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from DailymotionURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 and AssetId=@assetId
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -223,7 +225,7 @@ namespace MarkscanAPI.Models
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='6FD30070-962C-4949-9100-F45A368039A0' and pus.Active =1
                             where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
-                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
+                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from ChomikujURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 and AssetId=@assetId
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -234,7 +236,7 @@ namespace MarkscanAPI.Models
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='6D74B5F2-D086-4756-BD2E-F4C8F9993CB3' and pus.Active =1
                             where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
-                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
+                            Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from BiliBiliURLs i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 and AssetId=@assetId
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId

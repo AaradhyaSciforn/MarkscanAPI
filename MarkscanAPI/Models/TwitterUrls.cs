@@ -28,6 +28,8 @@ namespace MarkscanAPI.Models
         public string? LikeCount { get; set; }
         [Column("PublishedOn")]
         public DateTime? PublishedOn { get; set; }
+        [Column("URLUploadDate")]
+        public DateTime? URLUploadDate { get; set; }
         [Column("Username")]
         public string? Username { get; set; }
         [Column("UserFullName")]
@@ -63,7 +65,7 @@ namespace MarkscanAPI.Models
                 using var conn = databaseConnection.GetConnection();
                 if (string.IsNullOrEmpty(AssetName))
                 {
-                    return await conn.QueryAsync<TwitterURLsNEW>(@"Select i.source_url_link SourceURLLink,A.AssetName AssetName,it.Name InfringementType, convert_tz(i.upload_date,'+00:00','+05:30') PublishedOn, i.view_count ViewCount, i.like_count LikeCount,i.retweet_count RetweetCount,i.Title,
+                    return await conn.QueryAsync<TwitterURLsNEW>(@"Select i.source_url_link SourceURLLink,A.AssetName AssetName,it.Name InfringementType, convert_tz(i.upload_date,'+00:00','+05:30') PublishedOn, convert_tz(i.URLUploadDate,'+00:00','+05:30') URLUploadDate, i.view_count ViewCount, i.like_count LikeCount,i.retweet_count RetweetCount,i.Title,
                             i.UserName,i.UserFullName,i.ProfileURL,i.VideoLength VideoDuration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name AudioLanguage,i.Keywords, cn.Name Country,i.Season,i.Episode from TwitterURLsNEW i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -78,7 +80,7 @@ namespace MarkscanAPI.Models
                 else
                 {
                     var assetId = await conn.QueryFirstOrDefaultAsync<string>(@"select Id from Asset where lower(AssetName)=lower(@AssetName)", new { AssetName });
-                    return await conn.QueryAsync<TwitterURLsNEW>(@"Select i.source_url_link SourceURLLink,A.AssetName AssetName,it.Name InfringementType, convert_tz(i.upload_date,'+00:00','+05:30') PublishedOn, i.view_count ViewCount, i.like_count LikeCount,i.retweet_count RetweetCount,i.Title,
+                    return await conn.QueryAsync<TwitterURLsNEW>(@"Select i.source_url_link SourceURLLink,A.AssetName AssetName,it.Name InfringementType, convert_tz(i.upload_date,'+00:00','+05:30') PublishedOn, convert_tz(i.URLUploadDate,'+00:00','+05:30') URLUploadDate, i.view_count ViewCount, i.like_count LikeCount,i.retweet_count RetweetCount,i.Title,
                             i.UserName,i.UserFullName,i.ProfileURL,i.VideoLength VideoDuration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name AudioLanguage,i.Keywords, cn.Name Country,i.Season,i.Episode from TwitterURLsNEW i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 and AssetId=@assetId
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId

@@ -27,6 +27,7 @@ namespace MarkscanAPI.Models
         public string? Category { get; set; }
         public DateTime? ChannelCreationDate { get; set; }
         public DateTime? PostUploadDateTime { get; set; }
+        public DateTime? URLUploadDate { get; set; }
         public string? InfringementType { get; set; }
 
         public static async Task<IEnumerable<TelegramUrls>> GetURLsForClient(IDatabaseConnection databaseConnection, string? ClientId, DateTime StartDate, DateTime? EndDate, string? AssetName)
@@ -36,7 +37,7 @@ namespace MarkscanAPI.Models
                 using var conn = databaseConnection.GetConnection();
                 if (string.IsNullOrEmpty(AssetName))
                 {
-                    return await conn.QueryAsync<TelegramUrls>(@"Select i.SourceURL,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate, i.Views,i.Subscribers,
+                    return await conn.QueryAsync<TelegramUrls>(@"Select i.SourceURL,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate, convert_tz(i.URLUploadDate,'+00:00','+05:30') URLUploadDate, i.Views,i.Subscribers,
                             i.ChannelName,i.ChannelCreationDate,i.ChannelURL,i.Duration,qp.Name Quality,pus.SignPostURL,lng1.Name Language1,lng2.Name Language2,lng3.Name Language3,lng4.Name Language4,
                             i.Season,i.Episode from TelegramURLsNEW i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 
@@ -55,7 +56,7 @@ namespace MarkscanAPI.Models
                 else
                 {
                     var assetId = await conn.QueryFirstOrDefaultAsync<string>(@"select Id from Asset where lower(AssetName)=lower(@AssetName)", new { AssetName });
-                    return await conn.QueryAsync<TelegramUrls>(@"Select i.SourceURL,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate, i.Views,i.Subscribers,
+                    return await conn.QueryAsync<TelegramUrls>(@"Select i.SourceURL,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate, convert_tz(i.URLUploadDate,'+00:00','+05:30') URLUploadDate, i.Views,i.Subscribers,
                             i.ChannelName,i.ChannelCreationDate,i.ChannelURL,i.Duration,qp.Name Quality,pus.SignPostURL,lng1.Name Language1,lng2.Name Language2,lng3.Name Language3,lng4.Name Language4,
                             i.Season,i.Episode from TelegramURLsNEW i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 and AssetId=@assetId
