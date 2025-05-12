@@ -44,6 +44,8 @@ namespace MarkscanAPI.Common
 
         [JsonIgnore]
         public bool Active { get; set; }
+        [JsonIgnore]
+        public string? UpdatedBy { get; set; }
 
         [Computed]
         [JsonIgnore]
