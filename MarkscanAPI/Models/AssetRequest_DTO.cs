@@ -23,6 +23,5 @@ namespace MarkscanAPI.Models
         public int? ReleaseYear { get; set; }
         public bool IsAssetExclusive { get; set; }
         public bool IsMonitoringOn { get; set; }
-        public bool IsApproved { get; set; }
     }
 }

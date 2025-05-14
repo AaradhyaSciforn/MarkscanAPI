@@ -571,4 +571,11 @@ namespace MarkscanAPI.Common
     {
         public bool IsMonitoring { get; set; }
     }
+    public class DetailsClass
+    {
+        public List<string>? ClientTypes { get; set; }
+        public List<string>? Genres { get; set; }
+        public List<string>? Languages { get; set; }
+        public List<string>? Countries { get; set; }
+    }
 }

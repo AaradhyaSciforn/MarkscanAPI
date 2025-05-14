@@ -82,7 +82,6 @@ namespace MarkscanAPI.AdminRoleEndpoints
                             _asset.ReleaseYear = asset.ReleaseYear;
                             _asset.IsAssetExclusive = asset.IsAssetExclusive;
                             _asset.IsMonitoringOn = asset.IsMonitoringOn;
-                            _asset.IsApproved = asset.IsApproved;
                             //lists
                             _asset.OriginLanguageList = MapOriginLanguage[asset.Id!].Select(x => x.Name).ToList();
                             _asset.ContentLanguageList = MapContentLanguage[asset.Id!].Select(x => x.Name).ToList();
@@ -166,7 +165,6 @@ namespace MarkscanAPI.AdminRoleEndpoints
                     _asset.ReleaseYear = asset.ReleaseYear;
                     _asset.IsAssetExclusive = asset.IsAssetExclusive;
                     _asset.IsMonitoringOn = asset.IsMonitoringOn;
-                    _asset.IsApproved = asset.IsApproved;
                     //lists
                     _asset.OriginLanguageList = originLangList.Select(x => x.Name).ToList();
                     _asset.ContentLanguageList = contentLangList.Select(x => x.Name).ToList();
@@ -416,7 +414,7 @@ namespace MarkscanAPI.AdminRoleEndpoints
             .WithMetadata(new SwaggerOperationAttribute("Update Assets.", "Updates a previously added client."));
 
 
-            app.MapPut("/UpdateAssetDetails/{CompanyName}/{AssetName}", async ([Required] string CompanyName, [Required] string AssetName, [FromBody] MonitoringStatusClass req,
+            app.MapPut("/UpdateMonitoringStatus/{CompanyName}/{AssetName}", async ([Required] string CompanyName, [Required] string AssetName, [FromBody] MonitoringStatusClass req,
                 ClaimsPrincipal user, // Automatically populated from JWT
                 IDistributedCache cache,
                 IDatabaseConnection DatabaseConnection) =>

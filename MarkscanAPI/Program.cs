@@ -248,7 +248,7 @@ app.MapPost("/Login", async ([FromBody] Login_DTO user, IDistributedCache cache)
 
 */
 
-app.MapGet("/GetInfringements/AllPlatforms", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
+app.MapPost("/GetInfringements/AllPlatforms", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client,partner")] async ([FromBody] Request_DTO req,
     ClaimsPrincipal user, // Automatically populated from JWT
     IDistributedCache cache) =>
 {
@@ -285,7 +285,7 @@ app.MapGet("/GetInfringements/AllPlatforms", [Authorize(AuthenticationSchemes = 
 }).WithTags("2. Get Infringements").WithMetadata(new SwaggerOperationAttribute("Get all the Infringements.", "Gets the list of all the infringements present on ALL Social Medias for the client."));
 
 
-app.MapGet("/GetInfringements/Youtube", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
+app.MapPost("/GetInfringements/Youtube", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client,partner")] async ([FromBody] Request_DTO req, 
     ClaimsPrincipal user, // Automatically populated from JWT
     IDistributedCache cache) =>
 {
@@ -321,7 +321,7 @@ app.MapGet("/GetInfringements/Youtube", [Authorize(AuthenticationSchemes = JwtBe
 
 }).WithTags("2. Get Infringements").WithMetadata(new SwaggerOperationAttribute("Get all the Infringements.", "Gets the list of all the infringements present on YouTube for the client.")); //yout
 
-app.MapGet("/GetInfringements/Facebook", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
+app.MapPost("/GetInfringements/Facebook", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client,partner")] async ([FromBody] Request_DTO req,
     ClaimsPrincipal user, // Automatically populated from JWT
     IDistributedCache cache) =>
 {
@@ -358,7 +358,7 @@ app.MapGet("/GetInfringements/Facebook", [Authorize(AuthenticationSchemes = JwtB
 }).WithTags("2. Get Infringements").WithMetadata(new SwaggerOperationAttribute("Get all the Infringements.", "Gets the list of all the infringements present on FaceBook for the client.")); // face
 
 
-app.MapGet("/GetInfringements/Instagram", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
+app.MapPost("/GetInfringements/Instagram", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client,partner")] async ([FromBody] Request_DTO req,
     ClaimsPrincipal user, // Automatically populated from JWT
     IDistributedCache cache) =>
 {
@@ -394,7 +394,7 @@ app.MapGet("/GetInfringements/Instagram", [Authorize(AuthenticationSchemes = Jwt
 
 }).WithTags("2. Get Infringements").WithMetadata(new SwaggerOperationAttribute("Get all the Infringements.", "Gets the list of all the infringements present on Instagram for the client.")); //insta
 
-app.MapGet("/GetInfringements/Telegram", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
+app.MapPost("/GetInfringements/Telegram", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client,partner")] async ([FromBody] Request_DTO req,
     ClaimsPrincipal user, // Automatically populated from JWT
     IDistributedCache cache) =>
 {
@@ -430,7 +430,7 @@ app.MapGet("/GetInfringements/Telegram", [Authorize(AuthenticationSchemes = JwtB
 
 }).WithTags("2. Get Infringements").WithMetadata(new SwaggerOperationAttribute("Get all the Infringements.", "Gets the list of all the infringements present on Telegram for the client.")); // tele
 
-app.MapGet("/GetInfringements/Twitter", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
+app.MapPost("/GetInfringements/Twitter", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client,partner")] async ([FromBody] Request_DTO req,
     ClaimsPrincipal user, // Automatically populated from JWT
     IDistributedCache cache) =>
 {
@@ -466,7 +466,7 @@ app.MapGet("/GetInfringements/Twitter", [Authorize(AuthenticationSchemes = JwtBe
 
 }).WithTags("2. Get Infringements").WithMetadata(new SwaggerOperationAttribute("Get all the Infringements.", "Gets the list of all the infringements present on Twitter for the client.")); // tweet
 
-app.MapGet("/GetInfringements/UGCAndOtherSocialMedia", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
+app.MapPost("/GetInfringements/UGCAndOtherSocialMedia", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client,partner")] async ([FromBody] Request_DTO req,
     ClaimsPrincipal user, // Automatically populated from JWT
     IDistributedCache cache) =>
 {
