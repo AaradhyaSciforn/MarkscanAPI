@@ -21,6 +21,61 @@ namespace MarkscanAPI.AdminRoleEndpoints
     {
         public static IEndpointRouteBuilder MapClientEndpoints(this IEndpointRouteBuilder app)
         {
+            app.MapGet("/GetDetails", async (
+                ClaimsPrincipal user, // Automatically populated from JWT
+                IDistributedCache cache,
+                IDatabaseConnection DatabaseConnection) =>
+            {
+                try
+                {
+                    var jti = user.FindFirstValue(JwtRegisteredClaimNames.Jti);
+                    if (string.IsNullOrEmpty(jti))
+                    {
+                        return Results.Unauthorized();
+                    }
+                    var userData = await cache.GetStringAsync(jti);
+                    if (userData == null)
+                    {
+                        return Results.Unauthorized();
+                    }
+                    var loggedInUser = JsonSerializer.Deserialize<Credentials>(userData);
+                    if (loggedInUser == null)
+                    {
+                        return Results.BadRequest("User is not logged in!");
+                    }
+                    var alreadyPresentClients = await ClientMarkscanAPI.GetAllClientsByUserName(DatabaseConnection, loggedInUser.UserName);
+
+                    using var conn = DatabaseConnection.GetConnection();
+                    var ClientTypeList = (await conn.QueryAsync<string>(@"select Name from ClientType where Active=1;")).ToList();
+                    var GenreList = (await conn.QueryAsync<string>(@"select Name from GenreMS where Active=1;")).ToList();
+                    var LanguageList = (await conn.QueryAsync<string>(@"select Name from Language where Active=1;")).Distinct().ToList();
+                    var CountryList = (await conn.QueryAsync<string>(@"select Name from Countries where Active=1;")).Distinct().ToList();
+
+                    var details = new DetailsClass()
+                    {
+                        ClientTypes = ClientTypeList,
+                        Genres = GenreList,
+                        Languages = LanguageList,
+                        Countries = CountryList
+                    };
+                    
+                    return Results.Ok(details);
+                }
+                catch (Exception ex)
+                {
+                    return Results.BadRequest(ex.Message.ToString());
+                }
+            })
+            .RequireAuthorization(
+                new AuthorizeAttribute
+                {
+                    AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+                    Roles = "partner"
+                }
+            )
+            .WithTags("3. Add/Update Clients and Assets")
+            .WithMetadata(new SwaggerOperationAttribute("Get all Clients.", "Fetches all the clients, previously sent through API."));
+
             app.MapGet("/GetAllClients", async (
                 ClaimsPrincipal user, // Automatically populated from JWT
                 IDistributedCache cache,
