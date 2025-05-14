@@ -503,7 +503,7 @@ app.MapPost("/GetInfringements/UGCAndOtherSocialMedia", [Authorize(Authenticatio
 }).WithTags("2. Get Infringements").WithMetadata(new SwaggerOperationAttribute("Get all the Infringements.", "Gets the list of all the infringements present on other Social Medias for the client.")); //UGC
 
 
-app.MapPost("/GetInfringements/Internet", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client")] async ([FromBody] Request_DTO req,
+app.MapPost("/GetInfringements/Internet", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client,partner")] async ([FromBody] Request_DTO req,
     ClaimsPrincipal user, // Automatically populated from JWT
     IDistributedCache cache) =>
 {

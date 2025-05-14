@@ -131,7 +131,7 @@ namespace MarkscanAPI.Models
                 if (string.IsNullOrEmpty(AssetName))
                 {
                     return await conn.QueryAsync<InternetURLs>(@"Select i.SourceURL,i.SourceDomain,i.InfringingURL,i.InfringingDomain,A.AssetName AssetName,it.Name InfringementType, convert_tz(i.URLUploadDate,'+00:00','+05:30') URLUploadDate,
-                            qp.Name Quality,pus.SignPostURL,lng1.Name Language1,lng2.Name Language2,lng3.Name Language3,lng4.Name Language4,
+                            qp.Name Quality,lng1.Name Language1,lng2.Name Language2,lng3.Name Language3,lng4.Name Language4,
                             i.Season,i.Episode, se.Name SearchEngine,i.KeyWord,i.PageNo,i.URLRank,ct.Name Country,i.SourceHTMLTag,i.DDLIndexURL1,i.DDLIndexURL2,i.DDLIndexURL3,i.Note1,i.Note2,ch.Name TVChannel, qp.Name QualityOfPrint from InternetURLsNEW i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id='83C95897-D4DF-4B51-9C95-1EE42DAA34C8'
@@ -144,7 +144,6 @@ namespace MarkscanAPI.Models
                             left Join SearchEngine se on se.Id = i.SearchEngineId and se.Active =1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left join Countries ct on ct.Id = i.CountryId and ct.Active =1
-                            Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='301B6496-B288-11ED-A6F5-00155D03A4B9' and pus.Active =1
                             where i.DiscoveryDoneAt >= @TLStartDate and i.DiscoveryDoneAt<= @TLEndDate and  i.IsInvalidURL = 0;"
                                 , new { ClientId, TLStartDate = StartDate.AddDays(-1).ToString("yyyy-MM-dd") + " 18:30:00", TLEndDate = EndDate?.ToString("yyyy-MM-dd") + " 18:30:00", commandTimeout = 3000 });
                 }
@@ -152,7 +151,7 @@ namespace MarkscanAPI.Models
                 {
                     var assetId = await conn.QueryFirstOrDefaultAsync<string>(@"select Id from Asset where lower(AssetName)=lower(@AssetName)", new { AssetName });
                     return await conn.QueryAsync<InternetURLs>(@"Select i.SourceURL,i.SourceDomain,i.InfringingURL,i.InfringingDomain,A.AssetName AssetName,it.Name InfringementType, convert_tz(i.URLUploadDate,'+00:00','+05:30') URLUploadDate,
-                            qp.Name Quality,pus.SignPostURL,lng1.Name Language1,lng2.Name Language2,lng3.Name Language3,lng4.Name Language4,
+                            qp.Name Quality,lng1.Name Language1,lng2.Name Language2,lng3.Name Language3,lng4.Name Language4,
                             i.Season,i.Episode, se.Name SearchEngine,i.KeyWord,i.PageNo,i.URLRank,ct.Name Country,i.SourceHTMLTag,i.DDLIndexURL1,i.DDLIndexURL2,i.DDLIndexURL3,i.Note1,i.Note2,ch.Name TVChannel,qp.Name QualityOfPrint from InternetURLsNEW i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 and AssetId=@assetId
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
@@ -165,7 +164,6 @@ namespace MarkscanAPI.Models
                             left Join SearchEngine se on se.Id = i.SearchEngineId and se.Active =1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left join Countries ct on ct.Id = i.CountryId and ct.Active =1
-                            Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='301B6496-B288-11ED-A6F5-00155D03A4B9' and pus.Active =1
                             where i.DiscoveryDoneAt >= @TLStartDate and i.DiscoveryDoneAt<= @TLEndDate and  i.IsInvalidURL = 0;"
                                 , new { ClientId, TLStartDate = StartDate.AddDays(-1).ToString("yyyy-MM-dd") + " 18:30:00", TLEndDate = EndDate?.ToString("yyyy-MM-dd") + " 18:30:00", assetId, commandTimeout = 3000 });
                 }
