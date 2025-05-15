@@ -63,7 +63,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
 
-       
+
     };
 });
 builder.Services.AddAuthorization(/*options =>
@@ -501,6 +501,43 @@ app.MapPost("/GetInfringements/UGCAndOtherSocialMedia", [Authorize(Authenticatio
     }
 
 }).WithTags("2. Get Infringements").WithMetadata(new SwaggerOperationAttribute("Get all the Infringements.", "Gets the list of all the infringements present on other Social Medias for the client.")); //UGC
+
+
+app.MapPost("/GetInfringements/Internet", [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "client,partner")] async ([FromBody] Request_DTO req,
+    ClaimsPrincipal user, // Automatically populated from JWT
+    IDistributedCache cache) =>
+{
+    try
+    {
+        var jti = user.FindFirstValue(JwtRegisteredClaimNames.Jti);
+        if (string.IsNullOrEmpty(jti))
+        {
+            return Results.Unauthorized();
+        }
+        var userData = await cache.GetStringAsync(jti);
+        if (userData == null)
+        {
+            return Results.Unauthorized();
+        }
+
+        var loggedInUser = JsonSerializer.Deserialize<Credentials>(userData);
+        if (req.StartDate != null)
+        {
+            if (req.EndDate == null)
+            {
+                req.EndDate = CommonFunctions.ConvertUtcToIst(DateTime.UtcNow);
+            }
+            var IntURLs = (await InternetURLs.GetURLsForClient(databaseConnection, loggedInUser.ClientId, (DateTime)req.StartDate, req.EndDate, req.AssetName)).ToList();
+            return Results.Ok(IntURLs);
+        }
+        return Results.BadRequest("Start Date must be present!");
+    }
+    catch (Exception ex)
+    {
+        return Results.BadRequest(ex.Message.ToString());
+    }
+
+}).WithTags("2. Get Infringements").WithMetadata(new SwaggerOperationAttribute("Get all the Infringements.", "Gets the list of all the infringements present on Internet for the client."));
 
 app.MapClientEndpoints();
 app.MapAssetEndpoints();
