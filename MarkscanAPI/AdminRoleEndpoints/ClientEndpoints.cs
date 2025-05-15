@@ -74,7 +74,7 @@ namespace MarkscanAPI.AdminRoleEndpoints
                 }
             )
             .WithTags("3. Add/Update Clients and Assets")
-            .WithMetadata(new SwaggerOperationAttribute("Get all Clients.", "Fetches all the clients, previously sent through API."));
+            .WithMetadata(new SwaggerOperationAttribute("Get required details.", "Fetches all the details required to add client and asset."));
 
             app.MapGet("/GetAllClients", async (
                 ClaimsPrincipal user, // Automatically populated from JWT

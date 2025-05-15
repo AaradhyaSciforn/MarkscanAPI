@@ -106,7 +106,7 @@ namespace MarkscanAPI.AdminRoleEndpoints
                 }
             )
             .WithTags("3. Add/Update Clients and Assets")
-            .WithMetadata(new SwaggerOperationAttribute("Get all Assets.", "Fetches all the clients, previously sent through API."));
+            .WithMetadata(new SwaggerOperationAttribute("Get all Assets.", "Fetches all the assets for a particular client."));
 
             app.MapGet("/GetAsset/{CompanyName}/{AssetName}", async ([Required] string? CompanyName, [Required] string? AssetName,
                 ClaimsPrincipal user, // Automatically populated from JWT
@@ -186,7 +186,7 @@ namespace MarkscanAPI.AdminRoleEndpoints
                 }
             )
             .WithTags("3. Add/Update Clients and Assets")
-            .WithMetadata(new SwaggerOperationAttribute("Get all Assets.", "Fetches all the clients, previously sent through API."));
+            .WithMetadata(new SwaggerOperationAttribute("Get Asset.", "Fetches the asset by client and asset name."));
 
             app.MapPost("/AddAsset", async ([FromBody] AssetRequest_DTO req,
                 ClaimsPrincipal user, // Automatically populated from JWT
@@ -298,7 +298,7 @@ namespace MarkscanAPI.AdminRoleEndpoints
                 }
             )
             .WithTags("3. Add/Update Clients and Assets")
-            .WithMetadata(new SwaggerOperationAttribute("Add Assets.", "Sends a post request to add client."));
+            .WithMetadata(new SwaggerOperationAttribute("Add Assets.", "Sends a post request to add asset."));
 
             app.MapPut("/UpdateAssetDetails", async ([FromBody] AssetRequest_DTO req,
                 ClaimsPrincipal user, // Automatically populated from JWT
@@ -411,7 +411,7 @@ namespace MarkscanAPI.AdminRoleEndpoints
                 }
             )
             .WithTags("3. Add/Update Clients and Assets")
-            .WithMetadata(new SwaggerOperationAttribute("Update Assets.", "Updates a previously added client."));
+            .WithMetadata(new SwaggerOperationAttribute("Update Assets.", "Updates a previously added asset."));
 
 
             app.MapPut("/UpdateMonitoringStatus/{CompanyName}/{AssetName}", async ([Required] string CompanyName, [Required] string AssetName, [FromBody] MonitoringStatusClass req,
@@ -472,7 +472,7 @@ namespace MarkscanAPI.AdminRoleEndpoints
                 }
             )
             .WithTags("3. Add/Update Clients and Assets")
-            .WithMetadata(new SwaggerOperationAttribute("Update Assets.", "Updates a previously added client."));
+            .WithMetadata(new SwaggerOperationAttribute("Update Monitoring status.", "Updates the monitoring status of a particular asset."));
 
             return app;
         }
