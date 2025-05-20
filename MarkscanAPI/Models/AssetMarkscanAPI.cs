@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using DbAccess;
 using MarkscanAPI.Common;
+using MySqlConnector;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MarkscanAPI.Models
@@ -59,6 +60,10 @@ namespace MarkscanAPI.Models
         {
             using var conn = databaseConnection.GetConnection();
             return await conn.QueryAsync<AssetMarkscanAPI>(@"select * from AssetMarkscanAPI where Active=1 and ClientMarkscanAPIId=@ClientId", new { ClientId });
+        }
+        public static async Task<IEnumerable<AssetMarkscanAPI>> GetAssetsByCopyrightId(string? CopyrightOwnerClientId, MySqlConnection? conn, MySqlTransaction? transacation = null)
+        {
+            return await conn.QueryAsync<AssetMarkscanAPI>(@"select * from AssetMarkscanAPI where Active=1 and CopyrightOwnerClientId=@CopyrightOwnerClientId", new { CopyrightOwnerClientId }, transaction: transacation);
         }
         public static async Task<AssetMarkscanAPI> GetAssetByAssetNameAndClientId(IDatabaseConnection databaseConnection, string? AssetName, string? ClientId)
         {

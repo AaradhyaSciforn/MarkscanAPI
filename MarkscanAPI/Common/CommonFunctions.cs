@@ -12,6 +12,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Transactions;
 using System.Web;
 
 
@@ -465,8 +466,29 @@ namespace MarkscanAPI.Common
                             var ownerToDelete = presentOwners.Value;
                             ownerToDelete.Active = false;
                             ownerToDelete.UpdatedOn = DateTime.UtcNow;
+                            await makeAssetsInactiveByCopyrightOwner(ownerToDelete, conn, transaction);
                             await conn.UpdateAsync(ownerToDelete, transaction);
                         }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public static async Task makeAssetsInactiveByCopyrightOwner(ClientMarkscanAPICopyrightOwner? owner, MySqlConnection? conn, MySqlTransaction? transaction)
+        {
+            try
+            {
+                var assetList = await AssetMarkscanAPI.GetAssetsByCopyrightId(owner.Id, conn, transaction);
+                if (assetList != null && assetList.Any())
+                {
+                    foreach (var asset in assetList)
+                    {
+                        asset.Active = false;
+                        asset.UpdatedOn = DateTime.UtcNow;
+                        await conn.UpdateAsync(asset, transaction);
                     }
                 }
             }
