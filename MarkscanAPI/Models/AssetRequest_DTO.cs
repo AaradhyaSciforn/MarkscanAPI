@@ -19,6 +19,8 @@ namespace MarkscanAPI.Models
         public DateTime? RightsExpiryDate { get; set; }
         public DateTime? OttBroadcastReleaseDateTime { get; set; }
         public DateTime? OttReleaseDateTime { get; set; }
+        public string? Timezonecode { get; set; }
+        public string? BroadCastDay { get; set; }
         public string? ImdbId { get; set; }
         public int? ReleaseYear { get; set; }
         public bool IsAssetExclusive { get; set; }

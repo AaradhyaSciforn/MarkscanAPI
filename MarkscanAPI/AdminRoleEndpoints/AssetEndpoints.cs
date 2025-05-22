@@ -8,8 +8,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection.Emit;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -19,6 +21,7 @@ namespace MarkscanAPI.AdminRoleEndpoints
     {
         public static IEndpointRouteBuilder MapAssetEndpoints(this IEndpointRouteBuilder app)
         {
+            //getallAsset
             app.MapGet("/GetAllAssetsForClient/{CompanyName}", async ([Required] string? CompanyName,
                 ClaimsPrincipal user, // Automatically populated from JWT
                 IDistributedCache cache,
@@ -82,6 +85,8 @@ namespace MarkscanAPI.AdminRoleEndpoints
                             _asset.ReleaseYear = asset.ReleaseYear;
                             _asset.IsAssetExclusive = asset.IsAssetExclusive;
                             _asset.IsMonitoringOn = asset.IsMonitoringOn;
+                            _asset.Timezonecode = asset.Timezonecode;
+                            _asset.BroadCastDay = asset.BroadCastDay;
                             //lists
                             _asset.OriginLanguageList = MapOriginLanguage[asset.Id!].Select(x => x.Name).ToList();
                             _asset.ContentLanguageList = MapContentLanguage[asset.Id!].Select(x => x.Name).ToList();
@@ -108,6 +113,8 @@ namespace MarkscanAPI.AdminRoleEndpoints
             .WithTags("3. Add/Update Clients and Assets")
             .WithMetadata(new SwaggerOperationAttribute("Get all Assets.", "Fetches all the assets for a particular client."));
 
+
+            //getAsset
             app.MapGet("/GetAsset/{CompanyName}/{AssetName}", async ([Required] string? CompanyName, [Required] string? AssetName,
                 ClaimsPrincipal user, // Automatically populated from JWT
                 IDistributedCache cache,
@@ -165,6 +172,8 @@ namespace MarkscanAPI.AdminRoleEndpoints
                     _asset.ReleaseYear = asset.ReleaseYear;
                     _asset.IsAssetExclusive = asset.IsAssetExclusive;
                     _asset.IsMonitoringOn = asset.IsMonitoringOn;
+                    _asset.Timezonecode = asset.Timezonecode;
+                    _asset.BroadCastDay = asset.BroadCastDay;
                     //lists
                     _asset.OriginLanguageList = originLangList.Select(x => x.Name).ToList();
                     _asset.ContentLanguageList = contentLangList.Select(x => x.Name).ToList();
@@ -188,6 +197,7 @@ namespace MarkscanAPI.AdminRoleEndpoints
             .WithTags("3. Add/Update Clients and Assets")
             .WithMetadata(new SwaggerOperationAttribute("Get Asset.", "Fetches the asset by client and asset name."));
 
+            //add
             app.MapPost("/AddAsset", async ([FromBody] AssetRequest_DTO req,
                 ClaimsPrincipal user, // Automatically populated from JWT
                 IDistributedCache cache,
@@ -277,6 +287,8 @@ namespace MarkscanAPI.AdminRoleEndpoints
                     _asset.ReleaseYear = req.ReleaseYear;
                     _asset.IsAssetExclusive = req.IsAssetExclusive;
                     _asset.IsMonitoringOn = req.IsMonitoringOn;
+                    _asset.Timezonecode = req.Timezonecode;
+                    _asset.BroadCastDay = req.BroadCastDay;
                     await conn.InsertAsync(_asset, transaction);
                     await CommonFunctions.AddOriginLanguage(req.OriginLanguageList, _asset, loggedInUser?.UserName, conn, transaction);
                     await CommonFunctions.AddContentLanguage(req.ContentLanguageList, _asset, loggedInUser?.UserName, conn, transaction);
@@ -300,6 +312,7 @@ namespace MarkscanAPI.AdminRoleEndpoints
             .WithTags("3. Add/Update Clients and Assets")
             .WithMetadata(new SwaggerOperationAttribute("Add Assets.", "Sends a post request to add asset."));
 
+            //update
             app.MapPut("/UpdateAssetDetails", async ([FromBody] AssetRequest_DTO req,
                 ClaimsPrincipal user, // Automatically populated from JWT
                 IDistributedCache cache,
@@ -390,6 +403,8 @@ namespace MarkscanAPI.AdminRoleEndpoints
                     asset.ReleaseYear = req.ReleaseYear;
                     asset.IsAssetExclusive = req.IsAssetExclusive;
                     asset.IsMonitoringOn = req.IsMonitoringOn;
+                    asset.Timezonecode = req.Timezonecode;
+                    asset.BroadCastDay = req.BroadCastDay;
                     await conn.UpdateAsync(asset, transaction);
                     await CommonFunctions.UpdateOriginLanguage(req.OriginLanguageList, asset, loggedInUser?.UserName, conn, transaction);
                     await CommonFunctions.UpdateContentLanguage(req.ContentLanguageList, asset, loggedInUser?.UserName, conn, transaction);

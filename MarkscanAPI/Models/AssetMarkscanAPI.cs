@@ -55,6 +55,10 @@ namespace MarkscanAPI.Models
         public bool IsMonitoringOn { get; set; }
         [Column("IsApproved")]
         public bool IsApproved { get; set; }
+        [Column("Timezonecode")]
+        public string? Timezonecode { get; set; }
+        [Column("BroadCastDay")]
+        public string? BroadCastDay { get; set; }
 
         public static async Task<IEnumerable<AssetMarkscanAPI>> GetAssetsByClientId(IDatabaseConnection databaseConnection, string? ClientId)
         {
