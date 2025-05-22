@@ -541,6 +541,7 @@ app.MapPost("/GetInfringements/Internet", [Authorize(AuthenticationSchemes = Jwt
 
 app.MapClientEndpoints();
 app.MapAssetEndpoints();
+app.MapInfringementEndpoints();
 
 var authenticationTag = new OpenApiTag { Name = "Authentication", Description = "Methods related to authentication" };
 

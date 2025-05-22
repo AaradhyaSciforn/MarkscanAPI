@@ -85,7 +85,7 @@ namespace MarkscanAPI.AdminRoleEndpoints
                             //lists
                             _asset.OriginLanguageList = MapOriginLanguage[asset.Id!].Select(x => x.Name).ToList();
                             _asset.ContentLanguageList = MapContentLanguage[asset.Id!].Select(x => x.Name).ToList();
-                            _asset.CountryList = MapCountries[asset.Id!].Select(x => x.Name).ToList();
+                            _asset.CountryList = MapCountries.GetValueOrDefault(asset.Id!)?.Select(x => x.Name).ToList();
                             _asset.ExclusiveCountryList = MapExclusiveCountries[asset.Id!].Select(x => x.Name).ToList();
                             AssetToShowList.Add(_asset);
                         }
