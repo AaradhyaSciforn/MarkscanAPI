@@ -54,6 +54,7 @@ namespace MarkscanAPI.AdminRoleEndpoints
 
                     using var conn = DatabaseConnection.GetConnection();
                     var MapGenre = (await conn.QueryAsync<IdNameClass>(@"select Id, Name from GenreMS where Active=1;")).ToDictionary(x => x.Id, x => x.Name);
+                    var MapSubGenre = (await conn.QueryAsync<IdNameClass>(@"select Id, Name from SubGenreMS where Active=1;")).ToDictionary(x => x.Id, x => x.Name);
                     var MapCopyrightOwner = (await conn.QueryAsync<IdNameClass>(@"select Id, Name from ClientMarkscanAPICopyrightOwner where Active=1;")).ToDictionary(x => x.Id, x => x.Name);
                     var MapOriginLanguage = (await conn.QueryAsync<IdNameClass>(@"select AssetMarkscanAPIId Id, l.Name Name from AssetMarkscanAPIOriginLanguage apil
                         join Language l on l.Id=apil.LanguageId and l.Active=1 and apil.Active=1;")).GroupBy(x => x.Id).ToDictionary(x => x.Key, x=> x.ToList());
@@ -74,6 +75,10 @@ namespace MarkscanAPI.AdminRoleEndpoints
                             _asset.CompanyName = Client.CompanyName;
                             _asset.CopyrightOwnerName = MapCopyrightOwner[asset.CopyrightOwnerClientId!];
                             _asset.GenreName = MapGenre[asset.GenreId!];
+                            if (asset.SubGenreId != null)
+                            {
+                                _asset.SubGenreName = MapSubGenre[asset.SubGenreId];
+                            }
                             _asset.OfficialURL = asset.OfficialURL;
                             _asset.StartDate = asset.StartDate;
                             _asset.EndDate = asset.EndDate;
@@ -151,6 +156,7 @@ namespace MarkscanAPI.AdminRoleEndpoints
 
                     var owner = await ClientMarkscanAPICopyrightOwner.GetCopyrightOwnersForClientByCopyrightOwnerId(conn, client.Id, asset.CopyrightOwnerClientId);
                     var genre = await conn.QueryFirstOrDefaultAsync<IdNameClass>(@"select Id,Name from GenreMS where Active=1 and Id=@GenreId", new { GenreId = asset.GenreId });
+                    var subgenre = await conn.QueryFirstOrDefaultAsync<IdNameClass>(@"select Id,Name from SubGenreMS where Active=1 and Id=@SubGenreId", new { SubGenreId = asset.SubGenreId });
                     var originLangList = await AssetMarkscanAPIOriginLanguage.GetOriginLanguagesByAssetId(conn, asset.Id);
                     var contentLangList = await AssetMarkscanAPIContentLanguage.GetContentLanguagesByAssetId(conn, asset.Id);
                     var countryList = await AssetMarkscanAPICountries.GetCountriesByAssetId(conn, asset.Id);
@@ -161,6 +167,7 @@ namespace MarkscanAPI.AdminRoleEndpoints
                     _asset.CompanyName = client.CompanyName;
                     _asset.CopyrightOwnerName = owner.Name;
                     _asset.GenreName = genre.Name;
+                    _asset.SubGenreName = subgenre.Name;
                     _asset.OfficialURL = asset.OfficialURL;
                     _asset.StartDate = asset.StartDate;
                     _asset.EndDate = asset.EndDate;
@@ -266,6 +273,19 @@ namespace MarkscanAPI.AdminRoleEndpoints
                     {
                         return Results.BadRequest($"Asset Already present and is {((asset.IsApproved) ? "Approved" : "Pending for Approval")}!");
                     }
+                    SubGenreNameClass? SubGenre = new();
+                    if (!string.IsNullOrWhiteSpace(req.SubGenreName) && req.SubGenreName != "string")
+                    {
+                        SubGenre = await conn.QueryFirstOrDefaultAsync<SubGenreNameClass>(@"select Id,Name,GenreMSId from SubGenreMS where Name=@SubGenreName", new { SubGenreName = req.SubGenreName });
+                        if (SubGenre == null)
+                        {
+                            return Results.BadRequest($"No SubGenreName with name: {req.SubGenreName} exists!");
+                        }
+                        if (SubGenre.GenreMSId != genre.GenreId)
+                        {
+                            return Results.BadRequest($"No SubGenreName with name: {req.SubGenreName} exists for the genre: {req.GenreName}!");
+                        }
+                    }
 
                     await conn.OpenAsync();
                     using var transaction = await conn.BeginTransactionAsync();
@@ -276,6 +296,7 @@ namespace MarkscanAPI.AdminRoleEndpoints
                     _asset.AssetName = req.AssetName;
                     _asset.CopyrightOwnerClientId = owner.Id;
                     _asset.GenreId = genre.GenreId;
+                    _asset.SubGenreId = SubGenre.Id;
                     _asset.OfficialURL = req.OfficialURL;
                     _asset.StartDate = req.StartDate;
                     _asset.EndDate = req.EndDate;
@@ -381,6 +402,19 @@ namespace MarkscanAPI.AdminRoleEndpoints
                     {
                         return Results.BadRequest($"No AssetName: {req.AssetName} found to update for the Client: {req.CompanyName}!");
                     }
+                    SubGenreNameClass? SubGenre = new();
+                    if (!string.IsNullOrWhiteSpace(req.SubGenreName) && req.SubGenreName != "string")
+                    {
+                        SubGenre = await conn.QueryFirstOrDefaultAsync<SubGenreNameClass>(@"select Id,Name,GenreMSId from SubGenreMS where Name=@SubGenreName", new { SubGenreName = req.SubGenreName });
+                        if (SubGenre == null)
+                        {
+                            return Results.BadRequest($"No SubGenreName with name: {req.SubGenreName} exists!");
+                        }
+                        if (SubGenre.GenreMSId != genre.GenreId)
+                        {
+                            return Results.BadRequest($"No SubGenreName with name: {req.SubGenreName} exists for the genre: {req.GenreName}!");
+                        }
+                    }
 
                     await conn.OpenAsync();
                     using var transaction = await conn.BeginTransactionAsync();
@@ -392,6 +426,7 @@ namespace MarkscanAPI.AdminRoleEndpoints
                     asset.AssetName = req.AssetName;
                     asset.CopyrightOwnerClientId = owner.Id;
                     asset.GenreId = genre.GenreId;
+                    asset.SubGenreId = SubGenre.Id;
                     asset.OfficialURL = req.OfficialURL;
                     asset.StartDate = req.StartDate;
                     asset.EndDate = req.EndDate;

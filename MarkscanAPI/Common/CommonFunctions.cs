@@ -589,6 +589,12 @@ namespace MarkscanAPI.Common
         public string Id { get; set; }
         public string Name { get; set; }
     }
+    public class SubGenreNameClass
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string GenreMSId { get; set; }
+    }
     public class MonitoringStatusClass
     {
         public bool IsMonitoring { get; set; }
@@ -596,8 +602,19 @@ namespace MarkscanAPI.Common
     public class DetailsClass
     {
         public List<string>? ClientTypes { get; set; }
-        public List<string>? Genres { get; set; }
+        public List<GenreDetails>? GenreDetails { get; set; }
         public List<string>? Languages { get; set; }
         public List<string>? Countries { get; set; }
     }
+    public class GenreDetails
+    {
+        public string? GenreName { get; set; }
+        public List<string>? SubGenreNames { get; set; }
+    }
+    public class GenreSubGenreName
+    {
+        public string? GenreName { get; set; }
+        public string? SubGenreName { get; set; }
+    }
+
 }
