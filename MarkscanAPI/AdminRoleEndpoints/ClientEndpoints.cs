@@ -47,14 +47,14 @@ namespace MarkscanAPI.AdminRoleEndpoints
 
                     using var conn = DatabaseConnection.GetConnection();
                     var ClientTypeList = (await conn.QueryAsync<string>(@"select Name from ClientType where Active=1;")).ToList();
-                    var GenreList = (await conn.QueryAsync<string>(@"select Name from GenreMS where Active=1;")).ToList();
+                    List<GenreDetails> GenreList = (await conn.QueryAsync<GenreSubGenreName>(@"select g.Name GenreName, sg.Name SubGenreName from GenreMS g
+                        left join SubGenreMS sg on sg.GenreMSId=g.Id and g.Active=1 and sg.Active=1;")).GroupBy(x => x.GenreName).Select(x => new GenreDetails() { GenreName = x.Key, SubGenreNames = x?.Select(y => y.SubGenreName).ToList() }).ToList();
                     var LanguageList = (await conn.QueryAsync<string>(@"select Name from Language where Active=1;")).Distinct().ToList();
                     var CountryList = (await conn.QueryAsync<string>(@"select Name from Countries where Active=1;")).Distinct().ToList();
-
                     var details = new DetailsClass()
                     {
                         ClientTypes = ClientTypeList,
-                        Genres = GenreList,
+                        GenreDetails = GenreList,
                         Languages = LanguageList,
                         Countries = CountryList
                     };

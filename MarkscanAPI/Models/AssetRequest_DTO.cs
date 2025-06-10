@@ -8,6 +8,7 @@ namespace MarkscanAPI.Models
         public string? AssetName { get; set; }
         public string? CopyrightOwnerName { get; set; }
         public string? GenreName { get; set; }
+        public string? SubGenreName { get; set; }
         public string? OfficialURL { get; set; }
         public List<string>? OriginLanguageList { get; set; }
         public List<string>? ContentLanguageList { get; set; }

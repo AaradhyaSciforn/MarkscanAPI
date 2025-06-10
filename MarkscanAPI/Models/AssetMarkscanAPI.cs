@@ -20,6 +20,8 @@ namespace MarkscanAPI.Models
 
         [Column("GenreId")]
         public string? GenreId { get; set; }
+        [Column("SubGenreId")]
+        public string? SubGenreId { get; set; }
 
         [Column("OfficialURL")]
         public string? OfficialURL { get; set; }
