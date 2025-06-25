@@ -75,7 +75,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='33D60DB2-FAAA-45F2-9761-1B3882F4CB39' and pus.Active =1
-                            where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
+                            where i.URLUploadDate >= @TWStartDate and i.URLUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
                             Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from OkURLs i
@@ -86,7 +86,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='422EF444-8AD9-4DD6-8A41-D9F3670C735E' and pus.Active =1
-                            where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
+                            where i.URLUploadDate >= @TWStartDate and i.URLUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
                             Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from TiktokURLs i
@@ -97,7 +97,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='86FAC8E8-0F1F-4141-BA84-CD8711B72E39' and pus.Active =1
-                            where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
+                            where i.URLUploadDate >= @TWStartDate and i.URLUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
                             Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from ShareChatURLs i
@@ -108,7 +108,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='38750701-0627-48E0-B8B9-F48315DCE47F' and pus.Active =1
-                            where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
+                            where i.URLUploadDate >= @TWStartDate and i.URLUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
                             Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from VKURLs i
@@ -119,7 +119,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='2773562C-0B73-400F-8A4F-68C3F1B24BDE' and pus.Active =1
-                            where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
+                            where i.URLUploadDate >= @TWStartDate and i.URLUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
                             Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from DailymotionURLs i
@@ -130,7 +130,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='6FD30070-962C-4949-9100-F45A368039A0' and pus.Active =1
-                            where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
+                            where i.URLUploadDate >= @TWStartDate and i.URLUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
                             Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from ChomikujURLs i
@@ -141,7 +141,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='6D74B5F2-D086-4756-BD2E-F4C8F9993CB3' and pus.Active =1
-                            where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
+                            where i.URLUploadDate >= @TWStartDate and i.URLUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
                             Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from BiliBiliURLs i
@@ -152,7 +152,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='E7391B65-78D6-40EE-9723-E43BA778BDB8' and pus.Active =1
-                            where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0;"
+                            where i.URLUploadDate >= @TWStartDate and i.URLUploadDate<= @TWEndDate and  i.IsInvalidURL = 0;"
                                 , new { ClientId, TWStartDate = StartDate.AddDays(-1).ToString("yyyy-MM-dd") + " 18:30:00", TWEndDate = EndDate?.ToString("yyyy-MM-dd") + " 18:30:00", commandTimeout = 3000 });
                 }
                 else
@@ -168,7 +168,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='33D60DB2-FAAA-45F2-9761-1B3882F4CB39' and pus.Active =1
-                            where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
+                            where i.URLUploadDate >= @TWStartDate and i.URLUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
                             Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from OkURLs i
@@ -179,7 +179,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='422EF444-8AD9-4DD6-8A41-D9F3670C735E' and pus.Active =1
-                            where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
+                            where i.URLUploadDate >= @TWStartDate and i.URLUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
                             Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from TiktokURLs i
@@ -190,7 +190,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='86FAC8E8-0F1F-4141-BA84-CD8711B72E39' and pus.Active =1
-                            where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
+                            where i.URLUploadDate >= @TWStartDate and i.URLUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
                             Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from ShareChatURLs i
@@ -201,7 +201,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='38750701-0627-48E0-B8B9-F48315DCE47F' and pus.Active =1
-                            where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
+                            where i.URLUploadDate >= @TWStartDate and i.URLUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
                             Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from VKURLs i
@@ -212,7 +212,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='2773562C-0B73-400F-8A4F-68C3F1B24BDE' and pus.Active =1
-                            where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
+                            where i.URLUploadDate >= @TWStartDate and i.URLUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
                             Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from DailymotionURLs i
@@ -223,7 +223,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='6FD30070-962C-4949-9100-F45A368039A0' and pus.Active =1
-                            where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
+                            where i.URLUploadDate >= @TWStartDate and i.URLUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
                             Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from ChomikujURLs i
@@ -234,7 +234,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='6D74B5F2-D086-4756-BD2E-F4C8F9993CB3' and pus.Active =1
-                            where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
+                            where i.URLUploadDate >= @TWStartDate and i.URLUploadDate<= @TWEndDate and  i.IsInvalidURL = 0
                             union
                             Select i.VideoURL VideoURL,i.VideoTitle VideoTitle,A.AssetName AssetName,it.Name InfringementType, i.PostUploadDate PostUploadDate, convert_tz(i.DiscoveryDoneAt,'+00:00','+05:30') URLUploadDate, i.Views Views, i.Likes Likes,i.CommentCount CommentCount,i.Subscriber,
                             i.ChannelOrProfileName,i.ChannelOrProfileURL,i.Duration Duration,qp.Name QualityOfPrint,pus.SignPostURL,lng.Name Language,i.Keyword, cn.Name Country,i.Season,i.Episode from BiliBiliURLs i
@@ -245,7 +245,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='E7391B65-78D6-40EE-9723-E43BA778BDB8' and pus.Active =1
-                            where i.PostUploadDate >= @TWStartDate and i.PostUploadDate<= @TWEndDate and  i.IsInvalidURL = 0;"
+                            where i.URLUploadDate >= @TWStartDate and i.URLUploadDate<= @TWEndDate and  i.IsInvalidURL = 0;"
                                 , new { ClientId, TWStartDate = StartDate.AddDays(-1).ToString("yyyy-MM-dd") + " 18:30:00", TWEndDate = EndDate?.ToString("yyyy-MM-dd") + " 18:30:00", assetId, commandTimeout = 3000 });
                 }
             }

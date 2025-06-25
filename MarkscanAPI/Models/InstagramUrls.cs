@@ -78,7 +78,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.AudioLanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='1547A1E7-B288-11ED-A6F5-00155D03A4B9' and pus.Active =1
-                            where i.PostDate >= @FBStartDate and i.PostDate<= @FBEndDate and  i.IsInvalidURL = 0;"
+                            where i.URLUploadDate >= @FBStartDate and i.URLUploadDate<= @FBEndDate and  i.IsInvalidURL = 0;"
                                 , new { ClientId, FBStartDate = StartDate.AddDays(-1).ToString("yyyy-MM-dd") + " 18:30:00", FBEndDate = EndDate?.ToString("yyyy-MM-dd") + " 18:30:00", commandTimeout = 3000 });
                 }
                 else
@@ -93,7 +93,7 @@ namespace MarkscanAPI.Models
                             left join Language lng on i.AudioLanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
                             Left Join PlatformUrlSignPostURLs pus on pus.UrlId=i.Id and pus.PlatformId='1547A1E7-B288-11ED-A6F5-00155D03A4B9' and pus.Active =1
-                            where i.PostDate >= @FBStartDate and i.PostDate<= @FBEndDate and  i.IsInvalidURL = 0;"
+                            where i.URLUploadDate >= @FBStartDate and i.URLUploadDate<= @FBEndDate and  i.IsInvalidURL = 0;"
                                 , new { ClientId, FBStartDate = StartDate.AddDays(-1).ToString("yyyy-MM-dd") + " 18:30:00", FBEndDate = EndDate?.ToString("yyyy-MM-dd") + " 18:30:00", assetId, commandTimeout = 3000 });
                 }
             }

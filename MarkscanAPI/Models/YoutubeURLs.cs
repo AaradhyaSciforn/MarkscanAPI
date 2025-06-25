@@ -103,7 +103,7 @@ namespace MarkscanAPI.Models
                             left join Countries cn on i.CountryId=cn.Id and cn.Active
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
-                            where i.UploadDate >= @YTStartDate and i.UploadDate<= @YTEndDate and  i.IsInvalidURL = 0;"
+                            where i.URLUploadDate >= @YTStartDate and i.URLUploadDate<= @YTEndDate and  i.IsInvalidURL = 0;"
                             , new { ClientId, YTStartDate = StartDate.AddDays(-1).ToString("yyyy-MM-dd") + " 18:30:00", YTEndDate = EndDate?.ToString("yyyy-MM-dd") + " 18:30:00", commandTimeout = 3000 });
             }
             else
@@ -117,7 +117,7 @@ namespace MarkscanAPI.Models
                             left join Countries cn on i.CountryId=cn.Id and cn.Active
                             left join Language lng on i.LanguageId=lng.Id and lng.Active=1
                             left join QualityOfPrint qp on i.QualityOfPrintId=qp.Id and qp.Active=1
-                            where i.UploadDate >= @YTStartDate and i.UploadDate<= @YTEndDate and  i.IsInvalidURL = 0;"
+                            where i.URLUploadDate >= @YTStartDate and i.URLUploadDate<= @YTEndDate and  i.IsInvalidURL = 0;"
                             , new { ClientId, YTStartDate = StartDate.AddDays(-1).ToString("yyyy-MM-dd") + " 18:30:00", YTEndDate = EndDate?.ToString("yyyy-MM-dd") + " 18:30:00", assetId, commandTimeout = 3000 });
             }
         }
