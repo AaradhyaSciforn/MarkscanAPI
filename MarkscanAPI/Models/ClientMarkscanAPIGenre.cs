@@ -13,6 +13,10 @@ namespace MarkscanAPI.Models
         [Column("GenreId")]
         public string? GenreId { get; set; }
 
+        public static async Task<IEnumerable<ClientMarkscanAPIGenre>> GetAllGenres(MySqlConnection? conn, MySqlTransaction? transaction = null)
+        {
+            return await conn.QueryAsync<ClientMarkscanAPIGenre>(@"select * from ClientMarkscanAPIGenre where Active=1;", transaction: transaction);
+        }
         public static async Task<IEnumerable<ClientMarkscanAPIGenre>> GetActiveInactiveGenresForClient(MySqlConnection? conn, MySqlTransaction? transaction, string? ClientId)
         {
             return await conn.QueryAsync<ClientMarkscanAPIGenre>(@"select * from ClientMarkscanAPIGenre where ClientMarkscanAPIId=@ClientId;", new { ClientId }, transaction: transaction);

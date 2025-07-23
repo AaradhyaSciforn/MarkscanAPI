@@ -103,6 +103,8 @@ namespace MarkscanAPI.AdminRoleEndpoints
                     using var conn = DatabaseConnection.GetConnection();
                     var MapGenre = (await conn.QueryAsync<IdNameClass>(@"select Id, Name from GenreMS where Active=1;")).ToDictionary(x => x.Id, x => x.Name);
                     var MapClientType = (await conn.QueryAsync<IdNameClass>(@"select Id, Name from ClientType where Active=1;")).ToDictionary(x => x.Id, x => x.Name);
+                    var MapCopyrightOwners = (await ClientMarkscanAPICopyrightOwner.GetAllCopyrightOwners(conn)).GroupBy(x => x.ClientMarkscanAPIId).ToDictionary(x => x.Key, x => x.Select(y => y.Name).ToList());
+                    var MapGenreMarkscanAPI = (await ClientMarkscanAPIGenre.GetAllGenres(conn)).GroupBy(x => x.ClientMarkscanAPIId).ToDictionary(x => x.Key, x => x.Select(y => MapGenre[y.GenreId]).ToList());
                     List<ClientRequest_DTO> clientList = new();
 
                     if (alreadyPresentClients != null && alreadyPresentClients.Any())
@@ -111,8 +113,8 @@ namespace MarkscanAPI.AdminRoleEndpoints
                         {
                             ClientRequest_DTO _client = new();
                             _client.CompanyName = client.CompanyName;
-                            _client.CopyrightOwnerNameList = (await ClientMarkscanAPICopyrightOwner.GetCopyrightOwnersForClient(conn, client.Id))?.Select(x => x.Name).ToList();
-                            _client.GenreList = (await ClientMarkscanAPIGenre.GetGenresForClient(conn, client.Id))?.Select(x => MapGenre[x.GenreId]).ToList();
+                            _client.CopyrightOwnerNameList = MapCopyrightOwners[client.Id];
+                            _client.GenreList = MapGenreMarkscanAPI[client.Id];
                             _client.TypeOfClient = MapClientType[client.ClientTypeId];
                             clientList.Add(_client);
                         }
