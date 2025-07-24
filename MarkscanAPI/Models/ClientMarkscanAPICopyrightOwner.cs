@@ -13,6 +13,10 @@ namespace MarkscanAPI.Models
         [Column("Name")]
         public string? Name { get; set; }
 
+        public static async Task<IEnumerable<ClientMarkscanAPICopyrightOwner>> GetAllCopyrightOwners(MySqlConnection? conn, MySqlTransaction? transaction = null)
+        {
+            return await conn.QueryAsync<ClientMarkscanAPICopyrightOwner>(@"select * from ClientMarkscanAPICopyrightOwner where Active=1;", transaction: transaction);
+        }
         public static async Task<IEnumerable<ClientMarkscanAPICopyrightOwner>> GetActiveInactiveCopyrightOwnersForClient(MySqlConnection? conn, MySqlTransaction? transaction, string? ClientId)
         {
             return await conn.QueryAsync<ClientMarkscanAPICopyrightOwner>(@"select * from ClientMarkscanAPICopyrightOwner where ClientMarkscanAPIId=@ClientId;", new { ClientId }, transaction: transaction);
