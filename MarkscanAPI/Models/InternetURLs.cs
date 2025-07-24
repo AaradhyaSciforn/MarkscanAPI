@@ -120,12 +120,33 @@ namespace MarkscanAPI.Models
         [Write(false)]
         public string? AssetName { get; set; }
 
-        [Column("RemovalTime")]
-        public DateTime? SourceRemovalTime { get; set; }
-        [Column("DelistingTime")]
+        [Computed]
+        [Write(false)]
+        public string? removalstatus { get; set; }
+
+        [Computed]
+        [Write(false)]
+        public DateTime? RemovalTime { get; set; }
+
+        [Computed]
+        [Write(false)]
+        public string? delistingremovalstatus { get; set; }
+
+        [Computed]
+        [Write(false)]
         public DateTime? DelistingTime { get; set; }
-        [Column("DMCARemoval")]
-        public DateTime? InfringingDMCARemovalTime { get; set; }
+
+        [Computed]
+        [Write(false)]
+        public string? dmcaremovalstatus { get; set; }
+
+        [Computed]
+        [Write(false)]
+        public DateTime? DMCARemovalTime { get; set; }
+
+
+
+
 
 
 
@@ -141,7 +162,7 @@ namespace MarkscanAPI.Models
                     return await conn.QueryAsync<InternetURLs>(@"Select i.SourceURL,i.SourceDomain,i.InfringingURL,i.InfringingDomain,A.AssetName AssetName,it.Name InfringementType, convert_tz(i.URLUploadDate,'+00:00','+05:30') URLUploadDate,
                             qp.Name Quality,lng1.Name Language1,lng2.Name Language2,lng3.Name Language3,lng4.Name Language4,
                             i.Season,i.Episode, se.Name SearchEngine,i.KeyWord,i.PageNo,i.URLRank,ct.Name Country,i.SourceHTMLTag,i.DDLIndexURL1,i.DDLIndexURL2,i.DDLIndexURL3,i.Note1,i.Note2,ch.Name TVChannel, qp.Name QualityOfPrint,
-                            i.SourceRemovalTime ,i.InfringingRemovalTime DelistingTime,i.InfringingDMCARemovalTime  
+                            i.SourceRemovalTime RemovalTime,i.InfringingRemovalTime DelistingTime,i.InfringingDMCARemovalTime DMCARemovalTime,i.SourceRemovalStatus removalstatus,i.InfringingRemovalStatus delistingremovalstatus,i.InfringingDMCARemovalStatus  dmcaremovalstatus
                             from InternetURLsNEW i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id='83C95897-D4DF-4B51-9C95-1EE42DAA34C8'
@@ -163,7 +184,7 @@ namespace MarkscanAPI.Models
                     return await conn.QueryAsync<InternetURLs>(@"Select i.SourceURL,i.SourceDomain,i.InfringingURL,i.InfringingDomain,A.AssetName AssetName,it.Name InfringementType, convert_tz(i.URLUploadDate,'+00:00','+05:30') URLUploadDate,
                             qp.Name Quality,lng1.Name Language1,lng2.Name Language2,lng3.Name Language3,lng4.Name Language4,
                             i.Season,i.Episode, se.Name SearchEngine,i.KeyWord,i.PageNo,i.URLRank,ct.Name Country,i.SourceHTMLTag,i.DDLIndexURL1,i.DDLIndexURL2,i.DDLIndexURL3,i.Note1,i.Note2,ch.Name TVChannel,qp.Name QualityOfPrint,
-                            i.SourceRemovalTime ,i.InfringingRemovalTime DelistingTime,i.InfringingDMCARemovalTime  
+                            i.SourceRemovalTime RemovalTime,i.InfringingRemovalTime DelistingTime,i.InfringingDMCARemovalTime DMCARemovalTime,i.SourceRemovalStatus removalstatus,i.InfringingRemovalStatus delistingremovalstatus,i.InfringingDMCARemovalStatus  dmcaremovalstatus
                             from InternetURLsNEW i
                             inner join Asset A on A.id = i.AssetId and A.Active=1 and i.Active=1 and AssetId=@assetId
                             join ClientMaster cl on cl.Id=A.ClientMasterId and cl.Active=1 and cl.Id=@ClientId
